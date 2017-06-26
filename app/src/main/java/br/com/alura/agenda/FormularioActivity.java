@@ -11,12 +11,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import br.com.alura.agenda.dao.AlunoDAO;
+import br.com.alura.agenda.modelo.Aluno;
+
 public class FormularioActivity extends AppCompatActivity {
+
+    private FormularioHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario);
+        this.helper = new FormularioHelper(this);
     }
 
     @Override
@@ -31,20 +37,11 @@ public class FormularioActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_formulario_ok:
-                Toast.makeText(FormularioActivity.this, "Botão Clicado!", Toast.LENGTH_SHORT).show();
-
-                EditText campoNome = (EditText) findViewById(R.id.formulario_nome);
-                String nome = campoNome.getText().toString();
-
-                EditText campoEndereco = (EditText) findViewById(R.id.formulario_endereco);
-                String endereco = campoEndereco.getText().toString();
-
-                EditText campoTelefone = (EditText) findViewById(R.id.formulario_telefone);
-                String telefone = campoTelefone.getText().toString();
-
-                EditText campoSite = (EditText) findViewById(R.id.formulario_site);
-                String site = campoSite.getText().toString();
-
+                Aluno aluno = helper.pegaAluno();
+                AlunoDAO dao = new AlunoDAO(this);
+                dao.insere(aluno);
+                dao.close();
+                Toast.makeText(FormularioActivity.this, "Aluno " + aluno.getNome() + " salvo!", Toast.LENGTH_SHORT).show();
                 finish();
                 break;
         }
